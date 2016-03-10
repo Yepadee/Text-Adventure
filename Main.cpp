@@ -76,7 +76,6 @@ const string getTime() {
 	strftime(buf, sizeof(buf), "%Y-%m-%d %H-%M-%S", &tstruct);
 	return buf;
 }
-
 int getInt(string s) {
 	unsigned int num;
 	cout << s;
@@ -88,29 +87,27 @@ int getInt(string s) {
 	}
 	return num;
 }
-
 bool yesOrNo(string s) {
 	string yes[] = {"y", "ye", "yes", "yup", "yea", "yeah"};
 	string no[] = {"n", "no", "na", "nah", "nope"};
 	string answer = "";
-	while (answer == "") {
+	while (true) {
 		cout << s;
 		cin >> answer;
-		cout << endl;
 		for (string item : yes) {
 			if (item == answer) {
+				cout << endl;
 				return true;
 			}
 		}
 		for (string item : no) {
 			if (item == answer) {
+				cout << endl;
 				return false;
 			}
 		}
 		cout << INVALID_OPTION << endl;
-		answer = "";
 	}
-	return false;
 }
 void savePlayer() {
 	if (p.getRace() == -1) {
@@ -138,21 +135,24 @@ void loadPlayer() {
 		return;
 	}
 
-	int choice = -1;
-	while (choice == -1) {
+	int choice;
+	while (true) {
 		//Display files to user:
 		cout << "============[Saves]============" << endl;
 		for (unsigned int i = 0; i < files.size(); i++) {
 			cout << i + 1 << ". " << files[i] << endl;
 		}
-		choice = getInt("\nSelect a save to load, or enter '0' to exit: ");
+		cout << "Select a save to load, or enter '0' to exit." << endl;
+		choice = getInt("Your Choice: ");
 		if (choice > files.size() || choice < 0) {
 			cout << INVALID_OPTION << endl;
-			choice = -1;
 		}
-		if (choice == 0) {
+		else if (choice == 0) {
 			cout << endl;
 			return;
+		}
+		else {
+			break;
 		}
 	}
 	
@@ -190,7 +190,8 @@ void createPlayer() {
 				//Validate User Input:
 				choice = -1;
 				while (choice == -1) {
-					choice = getInt("\nSelect an option, or enter '0' to exit: ");
+					cout << "\nSelect an option, or enter '0' to exit.\n" << endl;
+					choice = getInt("Your Choice: ");
 					cout << endl;
 					if (choice == 0) {
 						return;
@@ -225,7 +226,6 @@ void createPlayer() {
 	p.setName(name);
 	savePlayer();
 }
-
 bool isPot(int itemID) {
 	for (string type : POT_TYPES) {
 		if (ALL_ITEMS[itemID]->getType() == type) {
@@ -234,7 +234,6 @@ bool isPot(int itemID) {
 	}
 	return false;
 }
-
 void buyPots() {
 	vector<int> shopItemIDs;
 	int itemID = 0;
@@ -279,7 +278,6 @@ void buyPots() {
 		}
 	}
 }
-
 void buyWeps() {
 	string wepType = WEP_TYPES[p.getProf()];
 	vector<int> shopItemIDs;
@@ -574,7 +572,7 @@ void fight() {
 	cout << "\n[!] '" << e->getName() << "' challenges you to a fight!\n" << endl;
 	while (true) {
 		cout << "================[Your Turn]================" << endl;
-		cout << "| Your HP: " << p.getHp() << "/" << MAX_HP << " | " << e->getName() << "'s HP: " << e->getHp() << "/" << e->getMaxHp() << " |" << endl;
+		cout <<  "| " << e->getName() << "'s HP: " << e->getHp() << "/" << e->getMaxHp() <<  "| Your HP: " << p.getHp() << "/" << MAX_HP << " |" << endl;
 		cout << "| 1. Attack | 2. Inventory | 0. Run Away! |\n" << endl;
 		choice = getInt("Your Choice: ");
 		cout << endl;
