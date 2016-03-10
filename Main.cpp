@@ -572,7 +572,7 @@ void fight() {
 	cout << "\n[!] '" << e->getName() << "' challenges you to a fight!\n" << endl;
 	while (true) {
 		cout << "================[Your Turn]================" << endl;
-		cout <<  "| " << e->getName() << "'s HP: " << e->getHp() << "/" << e->getMaxHp() <<  "| Your HP: " << p.getHp() << "/" << MAX_HP << " |" << endl;
+		cout <<  "| " << e->getName() << "'s HP: " << e->getHp() << "/" << e->getMaxHp() <<  " | Your HP: " << p.getHp() << "/" << MAX_HP << " |" << endl;
 		cout << "| 1. Attack | 2. Inventory | 0. Run Away! |\n" << endl;
 		choice = getInt("Your Choice: ");
 		cout << endl;
