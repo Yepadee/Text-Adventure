@@ -17,22 +17,22 @@ const string POT_TYPES[] = { "Health", "Berserker" };
 Item * ALL_ITEMS[] = {
 //Weapons:
 new Weapon("NULL", "Fist", 0, 1, 2), //0 - Default Weapon.
-new Weapon("Sword", "Iron Sword", 5, 3, 6), //1
-new Weapon("Sword", "Steel Sword", 20, 5, 8), //2
-new Weapon("Sword", "Ebonhawk Sword", 40, 10, 15), //3
-new Weapon("Sword", "Dawn-Breaker", 80, 15, 25), //4
-new Weapon("Bow", "Softwood Bow", 5, 3, 6), //5
-new Weapon("Bow", "Elderwood Bow", 20, 5, 8), //6
-new Weapon("Bow", "Hardwood Bow", 40, 10, 15), //7
-new Weapon("Bow", "Hunters Wrath", 80, 15, 25), //8
-new Weapon("Dagger", "Iron Dagger", 5, 3, 6), //9
-new Weapon("Dagger", "Steel Dagger", 20, 5, 8), //10
-new Weapon("Dagger", "Ebonhawk Dagger", 40, 10, 15), //11
-new Weapon("Dagger", "Death Blade", 80, 15, 25), //12
-new Weapon("Staff", "Softwood Staff", 5, 3, 6), //13
-new Weapon("Staff", "Elderwood Staff", 20, 5, 8), //14
-new Weapon("Staff", "Hardwood Staff", 40, 10, 15), //15
-new Weapon("Staff", "Infused Staff", 80, 15, 25), //16
+new Weapon("Sword", "Iron Sword", 5, 4, 6), //1
+new Weapon("Sword", "Steel Sword", 20, 8, 10), //2
+new Weapon("Sword", "Ebonhawk Sword", 40, 13, 15), //3
+new Weapon("Sword", "Dawn-Breaker", 80, 23, 25), //4
+new Weapon("Bow", "Softwood Bow", 5, 4, 6), //5
+new Weapon("Bow", "Elderwood Bow", 20, 8, 10), //6
+new Weapon("Bow", "Hardwood Bow", 40, 13, 15), //7
+new Weapon("Bow", "Hunters Wrath", 80, 23, 25), //8
+new Weapon("Dagger", "Iron Dagger", 5, 4, 6), //9
+new Weapon("Dagger", "Steel Dagger", 20, 8, 10), //10
+new Weapon("Dagger", "Ebonhawk Dagger", 40, 13, 15), //11
+new Weapon("Dagger", "Death Blade", 80, 23, 25), //12
+new Weapon("Staff", "Softwood Staff", 5, 4, 6), //13
+new Weapon("Staff", "Elderwood Staff", 20, 8, 10), //14
+new Weapon("Staff", "Hardwood Staff", 40, 13, 15), //15
+new Weapon("Staff", "Infused Staff", 80, 23, 25), //16
 //Potions:
 new HealthPot("Health", "Minor Health Potion", 4, 5), //17
 new HealthPot("Health", "Major Health Potion", 8, 10), //18
@@ -44,22 +44,22 @@ new ZerkPot("Berserker", "Potent Berzerker Potion", 14, 50), //22
 new Item("Junk", "Anvil", 5), //23
 new Item("Junk", "Rusty Screw", 3), //24
 new Item("Junk", "Paper Scrap", 2), //25
-new Item("Junk", "Bandit Crest", 8), //26
+new Item("Junk", "Bandit Crest", 6), //26
 new Item("Junk", "Ruined Book", 5), //27
-new Item("Junk", "Ruby", 10), //28
+new Item("Junk", "Ruby", 8), //28
 };
 
 //Enemies:
 Enemy * ENEMIES[] = {
-new Enemy("Angry Slime", 10, 5, 3, 6),
-new Enemy("Rat", 20, 4, 3, 8),
-new Enemy("Goblin", 40, 4, 6, 10),
-new Enemy("Fire Imp", 45, 5, 10, 15),
-new Enemy("Giant", 150, 10, 2, 3),
-new Enemy("Undead Knight", 45, 10, 8,14),
-new Enemy("Axe Berserker", 75, 12, 10, 15),
+new Enemy("Angry Slime", 10, 5, 10, 15),
+new Enemy("Rat", 30, 5, 14, 16),
+new Enemy("Goblin", 60, 4, 14, 18),
+new Enemy("Fire Imp", 70, 5, 12, 16),
+new Enemy("Giant", 150, 10, 4, 6),
+new Enemy("Undead Knight", 80, 10, 8, 16),
+new Enemy("Axe Berserker", 110, 12, 10, 15),
 new Enemy("Wisp", 45, 15, 1, 50),
-new Enemy("Dragon Minion", 75, 30, 8, 50),
+new Enemy("Dragon Minion", 75, 40, 8, 50),
 new Enemy("Ancient Dragon", 150, 200, 10, 20),
 };
 
@@ -142,7 +142,7 @@ void loadPlayer() {
 		for (unsigned int i = 0; i < files.size(); i++) {
 			cout << i + 1 << ". " << files[i] << endl;
 		}
-		cout << "Select a save to load, or enter '0' to exit." << endl;
+		cout << "\nSelect a save to load, or enter '0' to exit.\n" << endl;
 		choice = getInt("Your Choice: ");
 		if (choice > files.size() || choice < 0) {
 			cout << INVALID_OPTION << endl;
@@ -166,19 +166,15 @@ void loadPlayer() {
 }
 void createPlayer() {
 	int choice;
-	int validChar;
-	int validOption;
-	int validName;
+	bool validOption = false;
 	int race;
 	int prof;
 	string name("");
 	map<string, int> selections;
 	map<string, const string*>::iterator it;
 
-	validChar = false;
-	while (!validChar) {
+	while (!validOption) {
 		for (it = options.begin(); it != options.end(); it++) {
-			choice = -1;
 			validOption = false;
 			while (!validOption) {
 				cout << "======Character Creation======" << endl;
@@ -188,8 +184,7 @@ void createPlayer() {
 					cout << "\t" << i + 1 << ". " << it->second[i] << endl;
 				}
 				//Validate User Input:
-				choice = -1;
-				while (choice == -1) {
+				while (true) {
 					cout << "\nSelect an option, or enter '0' to exit.\n" << endl;
 					choice = getInt("Your Choice: ");
 					cout << endl;
@@ -199,7 +194,9 @@ void createPlayer() {
 					choice -= 1;
 					if (choice > sizeof(it->second) - 1 || choice < 0) {
 						cout << INVALID_OPTION << endl;
-						choice = -1;
+					}
+					else {
+						break;
 					}
 				}
 				selections[it->first] = choice;
@@ -208,8 +205,8 @@ void createPlayer() {
 		}
 		race = selections["Race"];
 		prof = selections["Prof"];
-		validName = false;
-		while (!validName) {
+		validOption = false;
+		while (!validOption) {
 			cout << "What name will you go by?: ";
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -217,9 +214,9 @@ void createPlayer() {
 			if (name == "0") {
 				return;
 			}
-			validName = yesOrNo("You chose " + name + ". Is this correct? (Y/N): ");
+			validOption = yesOrNo("You chose " + name + ". Is this correct? (Y/N): ");
 		}
-		validChar = yesOrNo("You will be known as " + name + ", the " + RACES[race] + " " + PROFS[prof] + ". Is this correct? (Y/N): ");		
+		validOption = yesOrNo("You will be known as " + name + ", the " + RACES[race] + " " + PROFS[prof] + ". Is this correct? (Y/N): ");
 	}
 	p.setRace(race);
 	p.setProf(prof);
@@ -272,7 +269,7 @@ void buyPots() {
 				cout << "You bought " << ALL_ITEMS[itemID]->getName() << " for " << ALL_ITEMS[itemID]->getValue() << "g!\n" << endl;
 			}
 			else {
-				cout << "\nYou dont have enough gold!\n" << endl;
+				cout << "You dont have enough gold!\n" << endl;
 
 			}
 		}
@@ -316,7 +313,7 @@ void buyWeps() {
 				cout << "You bought " << ALL_ITEMS[itemID]->getName() << " for " << ALL_ITEMS[itemID]->getValue() << "g!\n" << endl;
 			}
 			else {
-				cout << "\nYou dont have enough gold!\n" << endl;
+				cout << "You dont have enough gold!\n" << endl;
 
 			}
 		}
@@ -567,6 +564,7 @@ void fight() {
 		cout << "[!] You have cleared the dungeon of all foes. Congratulations!\n" << endl;
 		return;
 	}
+	Player oldP = p;
 	Enemy *e = ENEMIES[p.getLevel()];
 	e->resetHp();
 	cout << "\n[!] '" << e->getName() << "' challenges you to a fight!\n" << endl;
@@ -597,7 +595,7 @@ void fight() {
 		}
 		if (p.getHp() <= 0) {
 			cout << "You have been slain!\n" << endl;
-			p.resetHp();
+			p = oldP;
 			return;
 		}
 	}
